@@ -3,17 +3,18 @@ const express = require('express');
 const dotenv = require('dotenv');
 dotenv.config();
 
-const stuffRoutes = require('./Routes/stuff');
-
 const app = express();
 
 const mongoose = require('mongoose'); //Import du package mongoose
 
 app.use(express.json()); //sert à transformer le corps de la requête en objet JS utilisable
 
-const Thing = require('./Models/Thing');
 
+const stuffRoutes = require('./routes/routes_stuff');
 const bodyParser = require('body-parser');
+
+
+
 
 
 mongoose.connect(process.env.BDD_URL,
@@ -31,8 +32,37 @@ app.use((req, res, next) => {
     next();
 });
 
-app.use(bodyParser.json());
+app.post('/api/stuff', (req, res, next) => {
+    console.log(req.body);
+    res.status(201).json({
+      message: 'Objet créé !'
+    });
+});
+
+//Middleware qui répond aux requêtes GET envoyées à /api/stuff
+app.get('/api/stuff', (req, res, next) => {
+    const stuff = [
+      {
+        _id: 'oeihfzeoi',
+        title: 'Mon premier objet',
+        description: 'Les infos de mon premier objet',
+        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
+        price: 4900,
+        userId: 'qsomihvqios',
+      },
+      {
+        _id: 'oeihfzeomoihi',
+        title: 'Mon deuxième objet',
+        description: 'Les infos de mon deuxième objet',
+        imageUrl: 'https://cdn.pixabay.com/photo/2019/06/11/18/56/camera-4267692_1280.jpg',
+        price: 2900,
+        userId: 'qsomihvqios',
+      },
+    ];
+    res.status(200).json(stuff);
+  });
 
 app.use('/api/stuff', stuffRoutes);
+app.use(bodyParser.json());
 
 module.exports = app;

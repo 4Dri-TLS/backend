@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const Thing = require('../Models/Thing');
-const stuffCtrl = require('../Controllers/stuff');
+const Thing = require('../models/thing');
+const stuffCtrl = require('./controllers/ctrl_stuff');
 router.post('/', stuffCtrl.createThing);
 
 
